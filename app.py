@@ -46,3 +46,11 @@ def list_cupcakes():
     return jsonify(cupcakes=all_cupcakes)
 
 
+@app.route('/api/cupcakes/<int:cupcake_id>', methods=["GET"])
+def get_cupcake(cupcake_id):
+    """Show info about a single cupcake"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+    return jsonify(cupcake=cupcake.serialize())
+
+
