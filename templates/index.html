@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Cupcakes Info{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h1 class="text-center">See all the cupcakes!</h1>
+    <ul id="cupcakes-list" class="list-group">
+
+    </ul>
+  </div>
+</div>
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <h2>Add a new cupcake!</h2>
+    <form id="new-cupcake-form" method="POST">
+      <!-- add type=hidden form fields -->
+      <!-- We need form.hidden_tag(), because that is how the CSRF token is put into the form. -->
+      {{ form.hidden_tag() }}
+
+      <!-- Iterate over the form fields -->
+      {% for field in form
+        if field.widget.input_type != 'hidden' and field.short_name != 'available' %}
+      <div class="form-group">
+        {{ field.label }}
+        {% if field.flags.required %}
+        <span class="required">
+          *
+        </span>
+        {% endif %}
+        {{ field(class_="form-control") }}
+        <small class="form-text text-danger mb-1">
+          {% if field.errors %}
+          <p class="mb-0">{{ field.errors[0] }}</p>
+          {% endif %}
+        </small>
+      </div>
+      {% endfor %}
+      <button class="btn btn-success" type="submit">Add</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
