@@ -54,3 +54,32 @@ def get_cupcake(cupcake_id):
     return jsonify(cupcake=cupcake.serialize())
 
 
+@app.route('/api/cupcakes', methods=["POST"])
+def create_cupcake():
+    """Add cupcake, and return data about new cupcake.
+
+    Returns JSON like:
+        {cupcake: [{id, flavor, rating, size, image}]}
+    """
+
+    # It would be best to do error handling for when a user does not pass in all the required fields,
+    # but for now we're keeping this simple.
+    try:
+        new_cupcake = Cupcake(
+            flavor=request.json["flavor"],
+            size=request.json["size"],
+            rating=request.json["rating"],
+            image=request.json.get("image", None)
+        )
+        db.session.add(new_cupcake)
+        db.session.commit()
+        response_json = jsonify(cupcake=new_cupcake.serialize())
+        return (response_json, 201)
+    except:
+        response_json = jsonify(
+            message="A required field is missing. Please try again.")
+        # return render_template('index.html')
+        # what status code should I include?
+        return (response_json)
+
+
