@@ -38,3 +38,11 @@ def root():
     return render_template("index.html", form=form)
 
 
+@app.route('/api/cupcakes', methods=["GET"])
+def list_cupcakes():
+    """Show info about all cupcakes."""
+
+    all_cupcakes = [cupcake.serialize() for cupcake in Cupcake.query.all()]
+    return jsonify(cupcakes=all_cupcakes)
+
+
