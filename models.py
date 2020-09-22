@@ -24,8 +24,11 @@ class Cupcake(db.Model):
     image = db.Column(db.Text, nullable=False,
                       default="https://tinyurl.com/demo-cupcake")
 
+    def __repr__(self):
+        return f"<Cupcake {self.id} flavor={self.flavor} size={self.size} image={self.image}>"
+
     def serialize(self):
-        """Serialize cupcake info into a dict."""
+        """Returns a dictionary representation of a cupcake's info."""
 
         return {
             'id': self.id,
