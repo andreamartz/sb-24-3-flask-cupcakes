@@ -83,3 +83,25 @@ def create_cupcake():
         return (response_json)
 
 
+@app.route('/api/cupcakes/<int:cupcake_id>', methods=["PATCH"])
+def update_cupcake(cupcake_id):
+    """Update a new cupcake's information."""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    # It would be nice if we could update using the following code, but this approach only works if the user passes in ONLY the properties we are looking for (e.g., flavor, size, rating, image.) Any other properties that aren't in our model would break our app and cause an error.
+    #
+    # db.session.query(Todo).filter_by(id=id).update(request.json)
+    #
+    # Use request.json.get() instead of request.json[] to have the current data returned.  THis is useful in PATCH requests where not all the data is being updated.
+    cupcake.flavor = request.json.get('flavor', cupcake.flavor)
+    cupcake.size = request.json.get('size', cupcake.size)
+    cupcake.rating = request.json.get('rating', cupcake.rating)
+    cupcake.image = request.json.get('image', cupcake.image)
+
+    db.session.add(cupcake)
+    db.session.commit()
+
+    response_json = jsonify(cupcake=cupcake.serialize())
+    return (response_json)
+
